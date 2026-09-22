@@ -5,15 +5,14 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.utils import timezone
 
-from social_media.models import Profile, Hashtag, Post, Comment
+from social_media.models import Hashtag, Post, Comment
 
 
 def create_profile():
     user = get_user_model().objects.create_user(
         email="test@example.com", password="password12345"
     )
-    profile = Profile.objects.create(user=user, username="test", bio="test")
-    return profile
+    return user.profile
 
 
 class ProfileTest(TestCase):
