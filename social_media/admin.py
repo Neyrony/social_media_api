@@ -9,6 +9,7 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display = ("username", "bio", "user")
     search_fields = ("username", "user__email")
     ordering = ("username",)
+    filter_horizontal = ("following",)
     list_per_page = 25
 
 
@@ -18,6 +19,7 @@ class PostAdmin(admin.ModelAdmin):
     search_fields = ("title", "content", "owner__username")
     list_filter = ("created_at",)
     ordering = ("-created_at",)
+    filter_horizontal = ("hashtags", "liked_by")
     list_per_page = 25
 
 
