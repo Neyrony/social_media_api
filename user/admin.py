@@ -3,6 +3,13 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
 
+from social_media.models import Profile
+
+
+class ProfileInLine(admin.StackedInline):
+    model = Profile
+    extra = 0
+
 
 @admin.register(get_user_model())
 class CustomUserAdmin(UserAdmin):
@@ -35,3 +42,4 @@ class CustomUserAdmin(UserAdmin):
     list_display = ("email", "first_name", "last_name", "is_staff")
     search_fields = ("email", "first_name", "last_name")
     ordering = ("email",)
+    inlines = (ProfileInLine,)
