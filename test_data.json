@@ -1,0 +1,975 @@
+[
+  {
+    "model": "user.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$h6zV8jT9EwKx7yQ2p5v1mA$7VwV8K7rSgD0hR8yqN1tB+MvIqBw3j9Kk9H0QxK6gQ4=",
+      "last_login": null,
+      "is_superuser": true,
+      "first_name": "Alexander",
+      "last_name": "Smith",
+      "email": "alex@example.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2026-01-10T10:00:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "user.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$h6zV8jT9EwKx7yQ2p5v1mA$7VwV8K7rSgD0hR8yqN1tB+MvIqBw3j9Kk9H0QxK6gQ4=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "Maria",
+      "last_name": "Garcia",
+      "email": "maria@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-01-15T12:30:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "user.user",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$h6zV8jT9EwKx7yQ2p5v1mA$7VwV8K7rSgD0hR8yqN1tB+MvIqBw3j9Kk9H0QxK6gQ4=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "David",
+      "last_name": "Chen",
+      "email": "david@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-01-20T08:15:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "user.user",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$h6zV8jT9EwKx7yQ2p5v1mA$7VwV8K7rSgD0hR8yqN1tB+MvIqBw3j9Kk9H0QxK6gQ4=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "Emily",
+      "last_name": "Watson",
+      "email": "emily@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-02-01T14:45:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "social_media.profile",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "username": "alex_dev",
+      "bio": "Backend software engineer specializing in Python and distributed systems.",
+      "following": [
+        2,
+        3
+      ]
+    }
+  },
+  {
+    "model": "social_media.profile",
+    "pk": 2,
+    "fields": {
+      "user": 2,
+      "username": "maria_tech",
+      "bio": "Full-stack developer, open-source enthusiast, and coffee addict.",
+      "following": [
+        1,
+        4
+      ]
+    }
+  },
+  {
+    "model": "social_media.profile",
+    "pk": 3,
+    "fields": {
+      "user": 3,
+      "username": "david_devops",
+      "bio": "Cloud architect & DevOps engineer. Obsessed with Kubernetes and automation.",
+      "following": [
+        1,
+        2,
+        4
+      ]
+    }
+  },
+  {
+    "model": "social_media.profile",
+    "pk": 4,
+    "fields": {
+      "user": 4,
+      "username": "emily_ai",
+      "bio": "Data scientist and ML researcher exploring LLMs and vector databases.",
+      "following": [
+        1,
+        2
+      ]
+    }
+  },
+  {
+    "model": "social_media.hashtag",
+    "pk": 1,
+    "fields": {
+      "name": "django"
+    }
+  },
+  {
+    "model": "social_media.hashtag",
+    "pk": 2,
+    "fields": {
+      "name": "python"
+    }
+  },
+  {
+    "model": "social_media.hashtag",
+    "pk": 3,
+    "fields": {
+      "name": "backend"
+    }
+  },
+  {
+    "model": "social_media.hashtag",
+    "pk": 4,
+    "fields": {
+      "name": "devops"
+    }
+  },
+  {
+    "model": "social_media.hashtag",
+    "pk": 5,
+    "fields": {
+      "name": "docker"
+    }
+  },
+  {
+    "model": "social_media.hashtag",
+    "pk": 6,
+    "fields": {
+      "name": "machinelearning"
+    }
+  },
+  {
+    "model": "social_media.hashtag",
+    "pk": 7,
+    "fields": {
+      "name": "database"
+    }
+  },
+  {
+    "model": "social_media.post",
+    "pk": 1,
+    "fields": {
+      "title": "Optimizing QuerySets in Django",
+      "content": "Always remember to use select_related and prefetch_related when dealing with foreign keys and M2M fields to avoid the classic N+1 problem.",
+      "hashtags": [
+        1,
+        2,
+        3
+      ],
+      "owner": 1,
+      "liked_by": [
+        2,
+        3
+      ],
+      "publish_at": "2026-02-01T10:00:00Z",
+      "created_at": "2026-02-01T09:30:00Z"
+    }
+  },
+  {
+    "model": "social_media.post",
+    "pk": 2,
+    "fields": {
+      "title": "REST API Architecture Best Practices",
+      "content": "Designing clean APIs requires predictable status codes, proper pagination defaults, and rate limiting to keep downstream services healthy.",
+      "hashtags": [
+        2,
+        3
+      ],
+      "owner": 2,
+      "liked_by": [
+        1,
+        3,
+        4
+      ],
+      "publish_at": null,
+      "created_at": "2026-02-03T15:00:00Z"
+    }
+  },
+  {
+    "model": "social_media.post",
+    "pk": 3,
+    "fields": {
+      "title": "Containerizing Django with Multi-Stage Builds",
+      "content": "Multi-stage Docker builds reduce Django image sizes by up to 70%. Strip compilers and wheels from the final runtime image to minimize attack surfaces.",
+      "hashtags": [
+        1,
+        4,
+        5
+      ],
+      "owner": 3,
+      "liked_by": [
+        1,
+        2,
+        4
+      ],
+      "publish_at": "2026-02-05T08:00:00Z",
+      "created_at": "2026-02-05T07:45:00Z"
+    }
+  },
+  {
+    "model": "social_media.post",
+    "pk": 4,
+    "fields": {
+      "title": "Vector Search in PostgreSQL using pgvector",
+      "content": "You don't always need an external vector database for semantic search. pgvector integrates directly into PostgreSQL, making joins with Django models effortless.",
+      "hashtags": [
+        2,
+        6,
+        7
+      ],
+      "owner": 4,
+      "liked_by": [
+        1,
+        2,
+        3
+      ],
+      "publish_at": "2026-02-08T11:00:00Z",
+      "created_at": "2026-02-08T10:50:00Z"
+    }
+  },
+  {
+    "model": "social_media.post",
+    "pk": 5,
+    "fields": {
+      "title": "Scheduled Post: Deep Dive into Celery Beat",
+      "content": "Periodic tasks can silently stall if broker connections drop. Always configure timeouts and monitor heartbeat queues to prevent missing critical jobs.",
+      "hashtags": [
+        2,
+        3
+      ],
+      "owner": 1,
+      "liked_by": [],
+      "publish_at": "2026-03-01T12:00:00Z",
+      "created_at": "2026-02-10T16:00:00Z"
+    }
+  },
+  {
+    "model": "social_media.comment",
+    "pk": 1,
+    "fields": {
+      "content": "Great reminder! Do you also use django-debug-toolbar to spot duplicate queries early?",
+      "created_at": "2026-02-01T10:15:00Z",
+      "post": 1,
+      "owner": 2
+    }
+  },
+  {
+    "model": "social_media.comment",
+    "pk": 2,
+    "fields": {
+      "content": "Absolutely, it is indispensable during local development.",
+      "created_at": "2026-02-01T10:20:00Z",
+      "post": 1,
+      "owner": 1
+    }
+  },
+  {
+    "model": "social_media.comment",
+    "pk": 3,
+    "fields": {
+      "content": "Using Alpine vs Debian slim for multi-stage builds — what has been your experience with wheels compilation?",
+      "created_at": "2026-02-05T09:10:00Z",
+      "post": 3,
+      "owner": 1
+    }
+  },
+  {
+    "model": "social_media.comment",
+    "pk": 4,
+    "fields": {
+      "content": "Debian-slim is usually much faster because manylinux wheels work out-of-the-box without recompilation.",
+      "created_at": "2026-02-05T09:30:00Z",
+      "post": 3,
+      "owner": 3
+    }
+  },
+  {
+    "model": "social_media.comment",
+    "pk": 5,
+    "fields": {
+      "content": "How does pgvector scale once you exceed 10 million embedding rows?",
+      "created_at": "2026-02-08T12:00:00Z",
+      "post": 4,
+      "owner": 3
+    }
+  },
+  {
+    "model": "social_media.comment",
+    "pk": 6,
+    "fields": {
+      "content": "HNSW indexing handles millions quite well, though you'll need sufficient maintenance_work_mem when building the index.",
+      "created_at": "2026-02-08T12:45:00Z",
+      "post": 4,
+      "owner": 4
+    }
+  },
+  {
+    "model": "user.user",
+    "pk": 5,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$h6zV8jT9EwKx7yQ2p5v1mA$7VwV8K7rSgD0hR8yqN1tB+MvIqBw3j9Kk9H0QxK6gQ4=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "Lucas",
+      "last_name": "Moreau",
+      "email": "lucas@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-02-12T09:00:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "user.user",
+    "pk": 6,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$h6zV8jT9EwKx7yQ2p5v1mA$7VwV8K7rSgD0hR8yqN1tB+MvIqBw3j9Kk9H0QxK6gQ4=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "Sarah",
+      "last_name": "Connor",
+      "email": "sarah@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-02-14T11:20:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "social_media.profile",
+    "pk": 5,
+    "fields": {
+      "user": 5,
+      "username": "lucas_sec",
+      "bio": "AppSec specialist, penetration tester, and bug bounty hunter.",
+      "following": [
+        1,
+        3
+      ]
+    }
+  },
+  {
+    "model": "social_media.profile",
+    "pk": 6,
+    "fields": {
+      "user": 6,
+      "username": "sarah_frontend",
+      "bio": "React, TypeScript, CSS wizard. Making the web accessible for everyone.",
+      "following": [
+        2,
+        4
+      ]
+    }
+  },
+  {
+    "model": "social_media.hashtag",
+    "pk": 8,
+    "fields": {
+      "name": "security"
+    }
+  },
+  {
+    "model": "social_media.hashtag",
+    "pk": 9,
+    "fields": {
+      "name": "react"
+    }
+  },
+  {
+    "model": "social_media.hashtag",
+    "pk": 10,
+    "fields": {
+      "name": "jwt"
+    }
+  },
+  {
+    "model": "social_media.hashtag",
+    "pk": 11,
+    "fields": {
+      "name": "redis"
+    }
+  },
+  {
+    "model": "social_media.post",
+    "pk": 6,
+    "fields": {
+      "title": "Securing REST APIs: Beyond Simple JWT",
+      "content": "Storing refresh tokens in localStorage leaves you open to XSS. Prefer httpOnly, SameSite cookies with strict CSP policies to mitigate credential theft.",
+      "hashtags": [
+        3,
+        8,
+        10
+      ],
+      "owner": 5,
+      "liked_by": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "publish_at": "2026-02-15T13:00:00Z",
+      "created_at": "2026-02-15T12:45:00Z"
+    }
+  },
+  {
+    "model": "social_media.post",
+    "pk": 7,
+    "fields": {
+      "title": "State Management in Modern React",
+      "content": "Server state (TanStack Query, SWR) should be kept completely separate from UI client state. You rarely need global client stores once server caches are decoupled.",
+      "hashtags": [
+        9
+      ],
+      "owner": 6,
+      "liked_by": [
+        2
+      ],
+      "publish_at": "2026-02-18T10:00:00Z",
+      "created_at": "2026-02-18T09:15:00Z"
+    }
+  },
+  {
+    "model": "social_media.post",
+    "pk": 8,
+    "fields": {
+      "title": "Distributed Caching with Redis in Django",
+      "content": "Use Redis sentinel or cluster mode for high availability. When caching view results, set explicit TTLs and plan cache invalidation strategies ahead of time.",
+      "hashtags": [
+        1,
+        2,
+        11
+      ],
+      "owner": 1,
+      "liked_by": [
+        3,
+        5
+      ],
+      "publish_at": "2026-02-20T17:30:00Z",
+      "created_at": "2026-02-20T16:50:00Z"
+    }
+  },
+  {
+    "model": "social_media.post",
+    "pk": 9,
+    "fields": {
+      "title": "Scheduled Post: Automated CI/CD Pipelines with GitHub Actions",
+      "content": "Linting, running unit tests, and pushing Docker images to registries should be non-blocking where possible. Caching pip and Docker layers saves hours of compute.",
+      "hashtags": [
+        4,
+        5
+      ],
+      "owner": 3,
+      "liked_by": [],
+      "publish_at": "2026-03-10T08:00:00Z",
+      "created_at": "2026-02-22T14:10:00Z"
+    }
+  },
+  {
+    "model": "social_media.comment",
+    "pk": 7,
+    "fields": {
+      "content": "Couldn't agree more about httpOnly cookies. Rotating refresh tokens on every use also limits replay attacks.",
+      "created_at": "2026-02-15T13:20:00Z",
+      "post": 6,
+      "owner": 1
+    }
+  },
+  {
+    "model": "social_media.comment",
+    "pk": 8,
+    "fields": {
+      "content": "How do you handle CSRF protection cleanly when using httpOnly cookies with mobile clients?",
+      "created_at": "2026-02-15T14:05:00Z",
+      "post": 6,
+      "owner": 2
+    }
+  },
+  {
+    "model": "social_media.comment",
+    "pk": 9,
+    "fields": {
+      "content": "Mobile apps aren't vulnerable to CSRF like browsers are, so Authorization headers with Secure Storage work best there.",
+      "created_at": "2026-02-15T14:40:00Z",
+      "post": 6,
+      "owner": 5
+    }
+  },
+  {
+    "model": "social_media.comment",
+    "pk": 10,
+    "fields": {
+      "content": "TanStack Query completely eliminated 80% of our Redux boilerplate.",
+      "created_at": "2026-02-18T11:00:00Z",
+      "post": 7,
+      "owner": 2
+    }
+  },
+  {
+    "model": "social_media.comment",
+    "pk": 11,
+    "fields": {
+      "content": "Do you use redis-py connection pooling directly or rely on django-redis defaults?",
+      "created_at": "2026-02-20T18:10:00Z",
+      "post": 8,
+      "owner": 3
+    }
+  },
+  {
+    "model": "user.user",
+    "pk": 7,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$h6zV8jT9EwKx7yQ2p5v1mA$7VwV8K7rSgD0hR8yqN1tB+MvIqBw3j9Kk9H0QxK6gQ4=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "Kenji",
+      "last_name": "Sato",
+      "email": "kenji@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-02-25T07:15:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "user.user",
+    "pk": 8,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$h6zV8jT9EwKx7yQ2p5v1mA$7VwV8K7rSgD0hR8yqN1tB+MvIqBw3j9Kk9H0QxK6gQ4=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "Elena",
+      "last_name": "Rostova",
+      "email": "elena@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-02-28T16:40:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "social_media.profile",
+    "pk": 7,
+    "fields": {
+      "user": 7,
+      "username": "kenji_data",
+      "bio": "Data engineer building real-time pipelines with Kafka and ClickHouse.",
+      "following": [
+        3,
+        4,
+        8
+      ]
+    }
+  },
+  {
+    "model": "social_media.profile",
+    "pk": 8,
+    "fields": {
+      "user": 8,
+      "username": "elena_qa",
+      "bio": "QA Automation lead. Pytest, Playwright, and load testing enthusiast.",
+      "following": [
+        1,
+        2,
+        6,
+        7
+      ]
+    }
+  },
+  {
+    "model": "social_media.hashtag",
+    "pk": 12,
+    "fields": {
+      "name": "testing"
+    }
+  },
+  {
+    "model": "social_media.hashtag",
+    "pk": 13,
+    "fields": {
+      "name": "kafka"
+    }
+  },
+  {
+    "model": "social_media.hashtag",
+    "pk": 14,
+    "fields": {
+      "name": "architecture"
+    }
+  },
+  {
+    "model": "social_media.hashtag",
+    "pk": 15,
+    "fields": {
+      "name": "performance"
+    }
+  },
+  {
+    "model": "social_media.post",
+    "pk": 10,
+    "fields": {
+      "title": "Taming Event-Driven Architecture with Kafka",
+      "content": "Designing idempotent consumers is non-negotiable. Network partitions and retries guarantee at-least-once delivery, so deduplication keys must be stored persistently.",
+      "hashtags": [
+        3,
+        13,
+        14
+      ],
+      "owner": 7,
+      "liked_by": [
+        1,
+        3,
+        5
+      ],
+      "publish_at": "2026-03-02T10:00:00Z",
+      "created_at": "2026-03-02T09:15:00Z"
+    }
+  },
+  {
+    "model": "social_media.post",
+    "pk": 11,
+    "fields": {
+      "title": "Flaky Tests Are Ruining Your CI: How to Fix Them",
+      "content": "Hardcoded sleep statements and shared state between test runs are the top causes of test flakiness. Use explicit assertions with polling and isolate database fixtures per thread.",
+      "hashtags": [
+        2,
+        12,
+        15
+      ],
+      "owner": 8,
+      "liked_by": [
+        1,
+        2,
+        6,
+        7
+      ],
+      "publish_at": "2026-03-04T14:30:00Z",
+      "created_at": "2026-03-04T13:45:00Z"
+    }
+  },
+  {
+    "model": "social_media.post",
+    "pk": 12,
+    "fields": {
+      "title": "PostgreSQL Indexing: Beyond B-Tree",
+      "content": "BRIN indexes work wonders on append-only historical log tables with sequential timestamps, taking up a fraction of the disk space compared to standard B-Trees.",
+      "hashtags": [
+        7,
+        14,
+        15
+      ],
+      "owner": 1,
+      "liked_by": [
+        3,
+        7,
+        8
+      ],
+      "publish_at": "2026-03-06T11:00:00Z",
+      "created_at": "2026-03-06T10:20:00Z"
+    }
+  },
+  {
+    "model": "social_media.post",
+    "pk": 13,
+    "fields": {
+      "title": "Scheduled Post: Load Testing Django Endpoints with Locust",
+      "content": "Writing load testing scenarios in Python allows easy reuse of business logic models. We will simulate 50k concurrent users and trace bottlenecks down to the database connection pool.",
+      "hashtags": [
+        1,
+        12,
+        15
+      ],
+      "owner": 8,
+      "liked_by": [],
+      "publish_at": "2026-04-01T09:00:00Z",
+      "created_at": "2026-03-07T17:00:00Z"
+    }
+  },
+  {
+    "model": "social_media.comment",
+    "pk": 12,
+    "fields": {
+      "content": "Do you use outbox pattern with Kafka for transactional boundary safety across services?",
+      "created_at": "2026-03-02T10:45:00Z",
+      "post": 10,
+      "owner": 1
+    }
+  },
+  {
+    "model": "social_media.comment",
+    "pk": 13,
+    "fields": {
+      "content": "Yes, Debezium CDC reading Postgres WAL to emit events directly to Kafka is our standard stack for this.",
+      "created_at": "2026-03-02T11:10:00Z",
+      "post": 10,
+      "owner": 7
+    }
+  },
+  {
+    "model": "social_media.comment",
+    "pk": 14,
+    "fields": {
+      "content": "pytest-xdist parallelization exposed almost all our unisolated DB transactions last sprint.",
+      "created_at": "2026-03-04T15:00:00Z",
+      "post": 11,
+      "owner": 2
+    }
+  },
+  {
+    "model": "social_media.comment",
+    "pk": 15,
+    "fields": {
+      "content": "BRIN is incredible for timeseries audit logs, reduced our index footprint from 4GB to around 15MB.",
+      "created_at": "2026-03-06T12:30:00Z",
+      "post": 12,
+      "owner": 7
+    }
+  },
+  {
+    "model": "social_media.comment",
+    "pk": 16,
+    "fields": {
+      "content": "Just keep in mind pages_per_range tuning if rows arrive out of chronological order.",
+      "created_at": "2026-03-06T13:00:00Z",
+      "post": 12,
+      "owner": 3
+    }
+  },
+  {
+    "model": "user.user",
+    "pk": 9,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$h6zV8jT9EwKx7yQ2p5v1mA$7VwV8K7rSgD0hR8yqN1tB+MvIqBw3j9Kk9H0QxK6gQ4=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "Tariq",
+      "last_name": "Mansour",
+      "email": "tariq@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-03-08T08:30:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "user.user",
+    "pk": 10,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$h6zV8jT9EwKx7yQ2p5v1mA$7VwV8K7rSgD0hR8yqN1tB+MvIqBw3j9Kk9H0QxK6gQ4=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "Chloe",
+      "last_name": "Dubois",
+      "email": "chloe@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-03-10T14:15:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "social_media.profile",
+    "pk": 9,
+    "fields": {
+      "user": 9,
+      "username": "tariq_sys",
+      "bio": "Linux kernel tinkerer, observability engineer, and Prometheus enthusiast.",
+      "following": [
+        1,
+        3,
+        7
+      ]
+    }
+  },
+  {
+    "model": "social_media.profile",
+    "pk": 10,
+    "fields": {
+      "user": 10,
+      "username": "chloe_mobile",
+      "bio": "Mobile engineer building cross-platform apps with React Native & Flutter.",
+      "following": [
+        2,
+        6,
+        8
+      ]
+    }
+  },
+  {
+    "model": "social_media.hashtag",
+    "pk": 16,
+    "fields": {
+      "name": "monitoring"
+    }
+  },
+  {
+    "model": "social_media.hashtag",
+    "pk": 17,
+    "fields": {
+      "name": "mobile"
+    }
+  },
+  {
+    "model": "social_media.hashtag",
+    "pk": 18,
+    "fields": {
+      "name": "graphql"
+    }
+  },
+  {
+    "model": "social_media.hashtag",
+    "pk": 19,
+    "fields": {
+      "name": "opentelemetry"
+    }
+  },
+  {
+    "model": "social_media.post",
+    "pk": 14,
+    "fields": {
+      "title": "OpenTelemetry Instrumentation in Django",
+      "content": "Moving from ad-hoc logging to structured OpenTelemetry traces allows you to see the exact database query duration directly inside your distributed trace timeline.",
+      "hashtags": [
+        1,
+        16,
+        19
+      ],
+      "owner": 9,
+      "liked_by": [
+        1,
+        3,
+        7,
+        8
+      ],
+      "publish_at": "2026-03-12T10:00:00Z",
+      "created_at": "2026-03-12T09:40:00Z"
+    }
+  },
+  {
+    "model": "social_media.post",
+    "pk": 15,
+    "fields": {
+      "title": "Offline-First Sync Patterns in Mobile Apps",
+      "content": "Conflict-free Replicated Data Types (CRDTs) and local SQLite storage provide seamless user experience when mobile devices lose connectivity in rural areas.",
+      "hashtags": [
+        7,
+        17
+      ],
+      "owner": 10,
+      "liked_by": [
+        2,
+        6
+      ],
+      "publish_at": "2026-03-15T16:00:00Z",
+      "created_at": "2026-03-15T15:20:00Z"
+    }
+  },
+  {
+    "model": "social_media.post",
+    "pk": 16,
+    "fields": {
+      "title": "GraphQL vs REST: What We Learned After Two Years",
+      "content": "GraphQL solves over-fetching on mobile screens, but query complexity analysis and caching at the CDN layer require significantly more maintenance overhead.",
+      "hashtags": [
+        3,
+        14,
+        18
+      ],
+      "owner": 2,
+      "liked_by": [
+        1,
+        5,
+        6,
+        10
+      ],
+      "publish_at": "2026-03-18T11:30:00Z",
+      "created_at": "2026-03-18T10:55:00Z"
+    }
+  },
+  {
+    "model": "social_media.post",
+    "pk": 17,
+    "fields": {
+      "title": "Scheduled Post: Zero-Downtime Database Migrations with Django",
+      "content": "Adding columns with defaults or altering foreign keys can acquire exclusive locks and take down production. Use expand-and-contract patterns to migrate safely.",
+      "hashtags": [
+        1,
+        7,
+        14
+      ],
+      "owner": 1,
+      "liked_by": [],
+      "publish_at": "2026-04-15T12:00:00Z",
+      "created_at": "2026-03-20T18:00:00Z"
+    }
+  },
+  {
+    "model": "social_media.comment",
+    "pk": 17,
+    "fields": {
+      "content": "What exporter backend do you pair with OpenTelemetry — Jaeger or Tempo?",
+      "created_at": "2026-03-12T10:30:00Z",
+      "post": 14,
+      "owner": 3
+    }
+  },
+  {
+    "model": "social_media.comment",
+    "pk": 18,
+    "fields": {
+      "content": "Grafana Tempo because it natively links traces back to our Prometheus metrics and Loki logs.",
+      "created_at": "2026-03-12T10:55:00Z",
+      "post": 14,
+      "owner": 9
+    }
+  },
+  {
+    "model": "social_media.comment",
+    "pk": 19,
+    "fields": {
+      "content": "CRDTs can get heavy on payload size over time; do you run compaction intervals?",
+      "created_at": "2026-03-15T16:45:00Z",
+      "post": 15,
+      "owner": 7
+    }
+  },
+  {
+    "model": "social_media.comment",
+    "pk": 20,
+    "fields": {
+      "content": "Spot-on point about CDN caching. We ended up keeping REST for public assets and GraphQL strictly for authenticated mobile views.",
+      "created_at": "2026-03-18T12:15:00Z",
+      "post": 16,
+      "owner": 10
+    }
+  }
+]
