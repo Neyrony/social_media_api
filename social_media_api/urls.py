@@ -24,8 +24,10 @@ from django.urls import path, include
 urlpatterns = (
     [
         path("admin/", admin.site.urls),
-        path("api/social_media", include("social_media.urls")),
-        path("api/user", include("user.urls")),
+        path(
+            "api/social-media/", include("social_media.urls", namespace="social_media")
+        ),
+        path("api/user/", include("user.urls", namespace="user")),
     ]
     + debug_toolbar_urls()
     + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
