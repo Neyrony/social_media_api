@@ -1,7 +1,23 @@
+import pathlib
+import uuid
+
 from django.conf import settings
 from django.db import models
+from django.utils.deconstruct import deconstructible
+from django.utils.text import slugify
 
 from social_media.validators import validate_publish_at
+
+
+@deconstructible
+class ImagePath:
+    def __init__(self, path_to_store: str, field: str):
+        self.path_to_store = path_to_store
+        self.field = field
+
+    def __call__(self, instance, filename) -> pathlib.Path:
+        filename = f"{slugify(getattr(instance, self.field))}-{uuid.uuid4()}{pathlib.Path(filename).suffix}"
+        return pathlib.Path(self.path_to_store) / pathlib.Path(filename)
 
 
 class Profile(models.Model):
@@ -10,7 +26,10 @@ class Profile(models.Model):
     )
     username = models.CharField(max_length=255, unique=True)
     bio = models.TextField(blank=True)
-    # profile_picture = models.ImageField(null=True, upload_to=...)
+    profile_picture = models.ImageField(
+        null=True,
+        upload_to=ImagePath(path_to_store="profile_picture/uploads/", field="username"),
+    )
     following = models.ManyToManyField(
         "self",
         symmetrical=False,
@@ -38,7 +57,9 @@ class Hashtag(models.Model):
 class Post(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField()
-    # image = models.ImageField(null=True, upload_to=...)
+    image = models.ImageField(
+        null=True, upload_to=ImagePath("posts/uploads/", field="title")
+    )
     hashtags = models.ManyToManyField(Hashtag, blank=True, related_name="posts")
     owner = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="posts")
     liked_by = models.ManyToManyField(Profile, related_name="liked_posts", blank=True)

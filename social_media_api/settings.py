@@ -132,6 +132,9 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
+MEDIA_ROOT = "/files/media/"
+MEDIA_URL = "/media/"
+
 INTERNAL_IPS = [
     "127.0.0.1",
 ]

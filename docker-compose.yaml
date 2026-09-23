@@ -14,6 +14,7 @@ services:
       - db
     volumes:
       - ./:/app
+      - local_media:/files/media/
 
   db:
     image: postgres:16-alpine
@@ -27,3 +28,4 @@ services:
 
 volumes:
   local_db:
+  local_media:
