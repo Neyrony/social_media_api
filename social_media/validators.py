@@ -1,9 +1,11 @@
-import datetime
-
-from django.core.exceptions import ValidationError
 from django.utils import timezone
 
 
-def validate_publish_at(date: datetime.datetime | None) -> None:
-    if date is not None and date <= timezone.now():
-        raise ValidationError("Publish date should be greater than the current time")
+def validate_publish_at(value, exception, instance):
+    if value is not None and value < timezone.now():
+        raise exception("Publish date should be greater than the current time")
+
+    if instance and instance.publish_at and instance.publish_at < timezone.now():
+        raise exception("The post is already published")
+
+    return value

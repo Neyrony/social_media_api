@@ -29,6 +29,9 @@ class PostViewSet(ModelViewSet):
             return PostRetrieveSerializer
         return PostSerializer
 
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user.profile)
+
 
 class ProfileViewSet(ModelViewSet):
     queryset = Profile.objects.all()

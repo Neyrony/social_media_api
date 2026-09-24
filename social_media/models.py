@@ -2,6 +2,7 @@ import pathlib
 import uuid
 
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.deconstruct import deconstructible
 from django.utils.text import slugify
@@ -58,13 +59,14 @@ class Post(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField()
     image = models.ImageField(
-        null=True, upload_to=ImagePath("posts/uploads/", field="title")
+        null=True, blank=True, upload_to=ImagePath("posts/uploads/", field="title")
     )
     hashtags = models.ManyToManyField(Hashtag, blank=True, related_name="posts")
     owner = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="posts")
     liked_by = models.ManyToManyField(Profile, related_name="liked_posts", blank=True)
     publish_at = models.DateTimeField(
-        null=True, blank=True, validators=[validate_publish_at]
+        null=True,
+        blank=True,
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -73,6 +75,13 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+    def clean(self):
+        validate_publish_at(self.publish_at, ValidationError, self)
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
 
 class Comment(models.Model):

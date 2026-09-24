@@ -1,6 +1,8 @@
+from django.core.exceptions import ValidationError
 from rest_framework import serializers
 
 from social_media.models import Post, Profile
+from social_media.validators import validate_publish_at
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -27,18 +29,20 @@ class PostSerializer(serializers.ModelSerializer):
             "owner",
             "liked_by",
             "created_at",
+            "publish_at",
         )
-        extra_kwargs = {
-            "liked_by": {"style": {"base_template": "checkbox_multiple.html"}}
-        }
+        read_only_fields = ("id", "owner", "liked_by", "created_at")
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
 
-        if instance.owner == self.context["request"].user:
+        if instance.owner != self.context["request"].user.profile:
             data.pop("publish_at", None)
 
         return data
+
+    def validate_publish_at(self, value):
+        return validate_publish_at(value, ValidationError, self.instance)
 
 
 class PostListSerializer(PostSerializer):
