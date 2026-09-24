@@ -28,6 +28,9 @@ class PostSerializer(serializers.ModelSerializer):
             "liked_by",
             "created_at",
         )
+        extra_kwargs = {
+            "liked_by": {"style": {"base_template": "checkbox_multiple.html"}}
+        }
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
@@ -50,6 +53,9 @@ class PostListSerializer(PostSerializer):
 
 class PostRetrieveSerializer(PostSerializer):
     owner = ProfileListSerializer(read_only=True)
+    liked_by = serializers.SlugRelatedField(
+        many=True, read_only=True, slug_field="username"
+    )
 
     class Meta(PostSerializer.Meta):
         fields = PostSerializer.Meta.fields + ("publish_at",)

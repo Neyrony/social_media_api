@@ -10,8 +10,17 @@ from social_media.serializers import (
 
 
 class PostViewSet(ModelViewSet):
-    queryset = Post.objects.all()
     pagination_class = BasePagination
+
+    def get_queryset(self):
+        queryset = Post.objects.all()
+
+        if self.action in ("list", "retrieve"):
+            queryset = queryset.select_related(
+                "owner__user",
+            ).prefetch_related("liked_by")
+
+        return queryset
 
     def get_serializer_class(self):
         if self.action == "list":
