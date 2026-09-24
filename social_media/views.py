@@ -1,4 +1,6 @@
-from rest_framework import mixins
+from rest_framework import mixins, status
+from rest_framework.decorators import action
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
 from social_media.models import Post, Profile
@@ -9,6 +11,7 @@ from social_media.serializers import (
     PostRetrieveSerializer,
     PostSerializer,
     ProfileListRetrieveSerializer,
+    ProfileSerializer,
 )
 
 
@@ -43,4 +46,33 @@ class ProfileViewSet(
     GenericViewSet,
 ):
     queryset = Profile.objects.all()
-    serializer_class = ProfileListRetrieveSerializer
+
+    def get_serializer_class(self):
+        if self.action == "me" and self.request.method in ("PUT", "PATCH"):
+            return ProfileSerializer
+        return ProfileListRetrieveSerializer
+
+    @action(detail=False, methods=["GET", "PUT", "PATCH"])
+    def me(self, request):
+        user_profile = request.user.profile
+
+        if request.method == "GET":
+            user_profile_serializer = self.get_serializer(user_profile)
+
+            return Response(user_profile_serializer.data, status=status.HTTP_200_OK)
+        elif request.method == "PUT":
+            user_profile_serializer = self.get_serializer(
+                user_profile, data=request.data
+            )
+            user_profile_serializer.is_valid(raise_exception=True)
+            user_profile_serializer.save()
+
+            return Response(user_profile_serializer.data, status=status.HTTP_200_OK)
+        elif request.method == "PATCH":
+            user_profile_serializer = self.get_serializer(
+                user_profile, data=request.data, partial=True
+            )
+            user_profile_serializer.is_valid(raise_exception=True)
+            user_profile_serializer.save()
+
+            return Response(user_profile_serializer.data, status=status.HTTP_200_OK)

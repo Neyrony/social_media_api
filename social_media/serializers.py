@@ -9,6 +9,9 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ("id", "user", "username", "bio", "profile_picture", "following")
+        extra_kwargs = {
+            "following": {"style": {"base_template": "checkbox_multiple.html"}}
+        }
 
 
 class ProfileListRetrieveSerializer(ProfileSerializer):
