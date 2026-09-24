@@ -53,6 +53,12 @@ class ProfileViewSet(
         if self.action in ("list", "retrieve", "me"):
             queryset = queryset.select_related("user").prefetch_related("following")
 
+            if self.action == "list":
+                username = self.request.query_params.get("username")
+
+                if username:
+                    queryset = queryset.filter(username__icontains=username)
+
         return queryset
 
     def get_serializer_class(self):
