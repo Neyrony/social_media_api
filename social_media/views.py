@@ -45,7 +45,13 @@ class ProfileViewSet(
     mixins.ListModelMixin,
     GenericViewSet,
 ):
-    queryset = Profile.objects.all()
+    def get_queryset(self):
+        queryset = Profile.objects.all()
+
+        if self.action in ("list", "retrieve", "me"):
+            queryset = queryset.select_related("user").prefetch_related("following")
+
+        return queryset
 
     def get_serializer_class(self):
         if self.action == "me" and self.request.method in ("PUT", "PATCH"):
@@ -54,7 +60,7 @@ class ProfileViewSet(
 
     @action(detail=False, methods=["GET", "PUT", "PATCH"])
     def me(self, request):
-        user_profile = request.user.profile
+        user_profile = self.get_queryset().get(user=self.request.user)
 
         if request.method == "GET":
             user_profile_serializer = self.get_serializer(user_profile)
@@ -65,7 +71,7 @@ class ProfileViewSet(
                 user_profile, data=request.data
             )
             user_profile_serializer.is_valid(raise_exception=True)
-            user_profile_serializer.save()
+            user_profile_serializer.save(user=self.request.user)
 
             return Response(user_profile_serializer.data, status=status.HTTP_200_OK)
         elif request.method == "PATCH":
@@ -73,6 +79,6 @@ class ProfileViewSet(
                 user_profile, data=request.data, partial=True
             )
             user_profile_serializer.is_valid(raise_exception=True)
-            user_profile_serializer.save()
+            user_profile_serializer.save(user=self.request.user)
 
             return Response(user_profile_serializer.data, status=status.HTTP_200_OK)

@@ -9,6 +9,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ("id", "user", "username", "bio", "profile_picture", "following")
+        read_only_fields = ("id", "user")
         extra_kwargs = {
             "following": {"style": {"base_template": "checkbox_multiple.html"}}
         }
