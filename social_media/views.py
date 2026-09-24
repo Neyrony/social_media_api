@@ -45,6 +45,8 @@ class ProfileViewSet(
     mixins.ListModelMixin,
     GenericViewSet,
 ):
+    pagination_class = BasePagination
+
     def get_queryset(self):
         queryset = Profile.objects.all()
 
