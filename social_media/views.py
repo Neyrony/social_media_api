@@ -2,6 +2,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from social_media.models import Post, Profile
 from social_media.pagination import BasePagination
+from social_media.permissions import IsOwnerOrReadOnly
 from social_media.serializers import (
     PostListSerializer,
     PostRetrieveSerializer,
@@ -11,6 +12,7 @@ from social_media.serializers import (
 
 class PostViewSet(ModelViewSet):
     pagination_class = BasePagination
+    permission_classes = [IsOwnerOrReadOnly]
 
     def get_queryset(self):
         queryset = Post.objects.all()
