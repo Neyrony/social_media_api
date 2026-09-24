@@ -77,7 +77,8 @@ class Post(models.Model):
         return self.title
 
     def clean(self):
-        validate_publish_at(self.publish_at, ValidationError, self)
+        instance_to_check = self if self.pk is not None else None
+        validate_publish_at(self.publish_at, ValidationError, instance_to_check)
 
     def save(self, *args, **kwargs):
         self.full_clean()
