@@ -5,3 +5,4 @@ from user.serializers import UserSerializer
 
 class UserCreateView(CreateAPIView):
     serializer_class = UserSerializer
+    permission_classes = []
