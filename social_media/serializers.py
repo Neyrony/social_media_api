@@ -11,7 +11,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = ("id", "user", "username", "bio", "profile_picture", "following")
 
 
-class ProfileListSerializer(ProfileSerializer):
+class ProfileListRetrieveSerializer(ProfileSerializer):
     user = serializers.StringRelatedField(read_only=True)
     following = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field="username"
@@ -56,7 +56,7 @@ class PostListSerializer(PostSerializer):
 
 
 class PostRetrieveSerializer(PostSerializer):
-    owner = ProfileListSerializer(read_only=True)
+    owner = ProfileListRetrieveSerializer(read_only=True)
     liked_by = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field="username"
     )

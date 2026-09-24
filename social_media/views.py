@@ -1,4 +1,5 @@
-from rest_framework.viewsets import ModelViewSet
+from rest_framework import mixins
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
 from social_media.models import Post, Profile
 from social_media.pagination import BasePagination
@@ -7,6 +8,7 @@ from social_media.serializers import (
     PostListSerializer,
     PostRetrieveSerializer,
     PostSerializer,
+    ProfileListRetrieveSerializer,
 )
 
 
@@ -35,5 +37,10 @@ class PostViewSet(ModelViewSet):
         serializer.save(owner=self.request.user.profile)
 
 
-class ProfileViewSet(ModelViewSet):
+class ProfileViewSet(
+    mixins.RetrieveModelMixin,
+    mixins.ListModelMixin,
+    GenericViewSet,
+):
     queryset = Profile.objects.all()
+    serializer_class = ProfileListRetrieveSerializer
