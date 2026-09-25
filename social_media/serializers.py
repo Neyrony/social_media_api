@@ -22,6 +22,11 @@ class ProfileListRetrieveSerializer(ProfileSerializer):
     )
 
 
+class ProfileFollowingSerializer(ProfileSerializer):
+    class Meta(ProfileSerializer.Meta):
+        fields = ("id", "username", "bio", "profile_picture")
+
+
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post

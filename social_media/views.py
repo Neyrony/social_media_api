@@ -12,6 +12,7 @@ from social_media.serializers import (
     PostSerializer,
     ProfileListRetrieveSerializer,
     ProfileSerializer,
+    ProfileFollowingSerializer,
 )
 
 
@@ -58,12 +59,18 @@ class ProfileViewSet(
 
                 if username:
                     queryset = queryset.filter(username__icontains=username)
+        elif self.action == "following":
+            queryset = self.request.user.profile.following.all()
+        elif self.action == "followers":
+            queryset = self.request.user.profile.followers.all()
 
         return queryset
 
     def get_serializer_class(self):
         if self.action == "me" and self.request.method in ("PUT", "PATCH"):
             return ProfileSerializer
+        elif self.action in ("following", "followers"):
+            return ProfileFollowingSerializer
         return ProfileListRetrieveSerializer
 
     @action(detail=False, methods=["GET", "PUT", "PATCH"])
@@ -90,3 +97,19 @@ class ProfileViewSet(
             user_profile_serializer.save(user=self.request.user)
 
             return Response(user_profile_serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=["GET"], url_path="me/following")
+    def following(self, request):
+        following = self.get_queryset()
+        page = self.paginate_queryset(following)
+        following_serializer = self.get_serializer(page, many=True)
+
+        return self.get_paginated_response(following_serializer.data)
+
+    @action(detail=False, methods=["GET"], url_path="me/followers")
+    def followers(self, request):
+        followers = self.get_queryset()
+        page = self.paginate_queryset(followers)
+        followers_serializer = self.get_serializer(page, many=True)
+
+        return self.get_paginated_response(followers_serializer.data)
