@@ -13,6 +13,7 @@ from social_media.serializers import (
     ProfileListRetrieveSerializer,
     ProfileSerializer,
     ProfileFollowingSerializer,
+    EmptySerializer,
 )
 
 
@@ -71,6 +72,8 @@ class ProfileViewSet(
             return ProfileSerializer
         elif self.action in ("following", "followers"):
             return ProfileFollowingSerializer
+        elif self.action == "follow":
+            return EmptySerializer
         return ProfileListRetrieveSerializer
 
     @action(detail=False, methods=["GET", "PUT", "PATCH"])
@@ -113,3 +116,16 @@ class ProfileViewSet(
         followers_serializer = self.get_serializer(page, many=True)
 
         return self.get_paginated_response(followers_serializer.data)
+
+    @action(detail=True, methods=["POST"])
+    def follow(self, request, pk):
+        user_profile = self.request.user.profile
+        following_profile = self.get_object()
+        is_followed = user_profile.following.filter(pk=pk).exists()
+
+        if not is_followed:
+            user_profile.following.add(following_profile)
+        else:
+            user_profile.following.remove(following_profile)
+
+        return Response(status=status.HTTP_200_OK)

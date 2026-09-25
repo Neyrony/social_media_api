@@ -5,6 +5,10 @@ from social_media.models import Post, Profile
 from social_media.validators import validate_publish_at
 
 
+class EmptySerializer(serializers.Serializer):
+    pass
+
+
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
