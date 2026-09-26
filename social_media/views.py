@@ -22,7 +22,7 @@ class PostViewSet(ModelViewSet):
     permission_classes = [IsOwnerOrReadOnly]
 
     def get_queryset(self):
-        queryset = Post.objects.all()
+        queryset = Post.objects.filter(is_published=True)
 
         if self.action in ("list", "retrieve"):
             queryset = queryset.select_related(
