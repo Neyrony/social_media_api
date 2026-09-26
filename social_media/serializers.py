@@ -19,6 +19,19 @@ class ProfileSerializer(serializers.ModelSerializer):
         }
 
 
+class ProfileDetailedView(ProfileSerializer):
+    class Meta:
+        model = Profile
+        fields = (
+            "id",
+            "user",
+            "username",
+            "bio",
+            "profile_picture",
+        )
+        read_only_fields = ("id", "user")
+
+
 class ProfileListRetrieveSerializer(ProfileSerializer):
     user = serializers.StringRelatedField(read_only=True)
     following = serializers.SlugRelatedField(

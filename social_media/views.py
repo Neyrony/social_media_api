@@ -11,9 +11,9 @@ from social_media.serializers import (
     PostRetrieveSerializer,
     PostSerializer,
     ProfileListRetrieveSerializer,
-    ProfileSerializer,
     ProfileFollowingSerializer,
     EmptySerializer,
+    ProfileDetailedView,
 )
 
 
@@ -69,7 +69,7 @@ class ProfileViewSet(
 
     def get_serializer_class(self):
         if self.action == "me" and self.request.method in ("PUT", "PATCH"):
-            return ProfileSerializer
+            return ProfileDetailedView
         elif self.action in ("following", "followers"):
             return ProfileFollowingSerializer
         elif self.action == "follow":
