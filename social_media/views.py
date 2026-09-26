@@ -122,7 +122,11 @@ class ProfileViewSet(
         user_profile = self.request.user.profile
         following_profile = self.get_object()
         is_followed = user_profile.following.filter(pk=pk).exists()
-
+        if user_profile.id == following_profile.id:
+            return Response(
+                {"detail": "You cannot follow yourself"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         if not is_followed:
             user_profile.following.add(following_profile)
         else:
