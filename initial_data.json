@@ -186,7 +186,8 @@
         3
       ],
       "publish_at": "2026-02-01T10:00:00Z",
-      "created_at": "2026-02-01T09:30:00Z"
+      "created_at": "2026-02-01T09:30:00Z",
+      "is_published": true
     }
   },
   {
@@ -206,7 +207,8 @@
         4
       ],
       "publish_at": null,
-      "created_at": "2026-02-03T15:00:00Z"
+      "created_at": "2026-02-03T15:00:00Z",
+      "is_published": true
     }
   },
   {
@@ -227,7 +229,8 @@
         4
       ],
       "publish_at": "2026-02-05T08:00:00Z",
-      "created_at": "2026-02-05T07:45:00Z"
+      "created_at": "2026-02-05T07:45:00Z",
+      "is_published": true
     }
   },
   {
@@ -248,7 +251,8 @@
         3
       ],
       "publish_at": "2026-02-08T11:00:00Z",
-      "created_at": "2026-02-08T10:50:00Z"
+      "created_at": "2026-02-08T10:50:00Z",
+      "is_published": true
     }
   },
   {
@@ -264,7 +268,8 @@
       "owner": 1,
       "liked_by": [],
       "publish_at": "2026-03-01T12:00:00Z",
-      "created_at": "2026-02-10T16:00:00Z"
+      "created_at": "2026-02-10T16:00:00Z",
+      "is_published": false
     }
   },
   {
@@ -434,7 +439,8 @@
         4
       ],
       "publish_at": "2026-02-15T13:00:00Z",
-      "created_at": "2026-02-15T12:45:00Z"
+      "created_at": "2026-02-15T12:45:00Z",
+      "is_published": true
     }
   },
   {
@@ -451,7 +457,8 @@
         2
       ],
       "publish_at": "2026-02-18T10:00:00Z",
-      "created_at": "2026-02-18T09:15:00Z"
+      "created_at": "2026-02-18T09:15:00Z",
+      "is_published": true
     }
   },
   {
@@ -471,7 +478,8 @@
         5
       ],
       "publish_at": "2026-02-20T17:30:00Z",
-      "created_at": "2026-02-20T16:50:00Z"
+      "created_at": "2026-02-20T16:50:00Z",
+      "is_published": true
     }
   },
   {
@@ -487,7 +495,8 @@
       "owner": 3,
       "liked_by": [],
       "publish_at": "2026-03-10T08:00:00Z",
-      "created_at": "2026-02-22T14:10:00Z"
+      "created_at": "2026-02-22T14:10:00Z",
+      "is_published": false
     }
   },
   {
@@ -649,7 +658,8 @@
         5
       ],
       "publish_at": "2026-03-02T10:00:00Z",
-      "created_at": "2026-03-02T09:15:00Z"
+      "created_at": "2026-03-02T09:15:00Z",
+      "is_published": true
     }
   },
   {
@@ -671,7 +681,8 @@
         7
       ],
       "publish_at": "2026-03-04T14:30:00Z",
-      "created_at": "2026-03-04T13:45:00Z"
+      "created_at": "2026-03-04T13:45:00Z",
+      "is_published": true
     }
   },
   {
@@ -692,7 +703,8 @@
         8
       ],
       "publish_at": "2026-03-06T11:00:00Z",
-      "created_at": "2026-03-06T10:20:00Z"
+      "created_at": "2026-03-06T10:20:00Z",
+      "is_published": true
     }
   },
   {
@@ -709,7 +721,8 @@
       "owner": 8,
       "liked_by": [],
       "publish_at": "2026-04-01T09:00:00Z",
-      "created_at": "2026-03-07T17:00:00Z"
+      "created_at": "2026-03-07T17:00:00Z",
+      "is_published": false
     }
   },
   {
@@ -871,7 +884,8 @@
         8
       ],
       "publish_at": "2026-03-12T10:00:00Z",
-      "created_at": "2026-03-12T09:40:00Z"
+      "created_at": "2026-03-12T09:40:00Z",
+      "is_published": true
     }
   },
   {
@@ -890,7 +904,8 @@
         6
       ],
       "publish_at": "2026-03-15T16:00:00Z",
-      "created_at": "2026-03-15T15:20:00Z"
+      "created_at": "2026-03-15T15:20:00Z",
+      "is_published": true
     }
   },
   {
@@ -912,7 +927,8 @@
         10
       ],
       "publish_at": "2026-03-18T11:30:00Z",
-      "created_at": "2026-03-18T10:55:00Z"
+      "created_at": "2026-03-18T10:55:00Z",
+      "is_published": true
     }
   },
   {
@@ -929,7 +945,8 @@
       "owner": 1,
       "liked_by": [],
       "publish_at": "2026-04-15T12:00:00Z",
-      "created_at": "2026-03-20T18:00:00Z"
+      "created_at": "2026-03-20T18:00:00Z",
+      "is_published": true
     }
   },
   {

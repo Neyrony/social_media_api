@@ -2,11 +2,18 @@ from django.utils import timezone
 
 
 def validate_publish_at(value, exception, instance):
-    if instance:
-        original_obj = type(instance).objects.get(pk=instance.pk)
-        if original_obj.publish_at is None or original_obj.publish_at < timezone.now():
-            raise exception("The post is already published")
-    if value is not None and value < timezone.now():
-        raise exception("Publish date should be greater than the current time")
+    if instance and instance.pk:
+        if instance.is_published and value != instance.publish_at:
+            raise exception("Post is already published you cant change this value")
+        elif not instance.is_published:
+            if value is None:
+                raise exception("You cant set date to empty")
+            elif value is not None and value < timezone.now():
+                raise exception("This value should be greater than time now")
+
+            return value
+
+    if value is not None and value <= timezone.now():
+        raise exception("This value should be greater than time now")
 
     return value

@@ -4,6 +4,7 @@ import uuid
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils import timezone
 from django.utils.deconstruct import deconstructible
 from django.utils.text import slugify
 
@@ -69,6 +70,7 @@ class Post(models.Model):
         blank=True,
     )
     created_at = models.DateTimeField(auto_now_add=True)
+    is_published = models.BooleanField()
 
     class Meta:
         ordering = ["-created_at"]
@@ -77,11 +79,19 @@ class Post(models.Model):
         return self.title
 
     def clean(self):
-        instance_to_check = self if self.pk is not None else None
-        validate_publish_at(self.publish_at, ValidationError, instance_to_check)
+        validate_publish_at(self.publish_at, ValidationError, self)
+        super().clean()
 
     def save(self, *args, **kwargs):
         self.full_clean()
+
+        if self.publish_at is not None and self.publish_at >= timezone.now():
+            self.is_published = False
+        else:
+            self.is_published = True
+
+        self.publish_at = self.publish_at or self.created_at or timezone.now()
+
         super().save(*args, **kwargs)
 
 

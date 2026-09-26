@@ -20,6 +20,7 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = ("created_at",)
     ordering = ("-created_at",)
     filter_horizontal = ("hashtags", "liked_by")
+    readonly_fields = ("is_published",)
     list_per_page = 25
 
 
