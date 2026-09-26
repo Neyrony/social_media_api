@@ -1,7 +1,14 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
 
-from social_media.models import Profile, Post, Comment, Hashtag
+from social_media.models import Profile, Post, Comment, Hashtag, ProfileFollowing
+
+
+class FollowingInline(admin.TabularInline):
+    model = ProfileFollowing
+    fk_name = "from_profile"
+    autocomplete_fields = ["to_profile"]
+    extra = 1
 
 
 @admin.register(Profile)
@@ -9,8 +16,13 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display = ("username", "bio", "user")
     search_fields = ("username", "user__email")
     ordering = ("username",)
-    filter_horizontal = ("following",)
+    inlines = [FollowingInline]
     list_per_page = 25
+
+
+class CommentInLine(admin.TabularInline):
+    model = Comment
+    extra = 0
 
 
 @admin.register(Post)
@@ -22,6 +34,7 @@ class PostAdmin(admin.ModelAdmin):
     filter_horizontal = ("hashtags", "liked_by")
     readonly_fields = ("is_published",)
     list_per_page = 25
+    inlines = [CommentInLine]
 
 
 @admin.register(Comment)

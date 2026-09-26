@@ -4,6 +4,7 @@ import uuid
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import UniqueConstraint, CheckConstraint, Q, F
 from django.utils import timezone
 from django.utils.deconstruct import deconstructible
 from django.utils.text import slugify
@@ -37,6 +38,7 @@ class Profile(models.Model):
         symmetrical=False,
         related_name="followers",
         blank=True,
+        through="ProfileFollowing",
     )
 
     class Meta:
@@ -44,6 +46,24 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.username
+
+
+class ProfileFollowing(models.Model):
+    from_profile = models.ForeignKey(
+        Profile, on_delete=models.CASCADE, related_name="+"
+    )
+    to_profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="+")
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=["from_profile", "to_profile"], name="unique_following"
+            ),
+            CheckConstraint(
+                condition=~Q(from_profile=F("to_profile")),
+                name="forbid_follow_yourself",
+            ),
+        ]
 
 
 class Hashtag(models.Model):
