@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
 
-from social_media.models import Post, Profile
+from social_media.models import Post, Profile, Comment
 from social_media.validators import validate_publish_at
 
 
@@ -96,3 +96,27 @@ class PostRetrieveSerializer(PostSerializer):
             "created_at": {"format": "%d.%m.%Y %H:%M"},
             "publish_at": {"format": "%d.%m.%Y %H:%M"},
         }
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    post = serializers.PrimaryKeyRelatedField(
+        queryset=Post.objects.filter(is_public=True)
+    )
+
+    class Meta:
+        model = Comment
+        fields = ("content", "created_at", "post", "owner")
+        read_only_fields = ("id", "post", "owner")
+
+
+class CommentListSerializer(CommentSerializer):
+    owner_username = serializers.CharField(read_only=True, source="owner.username")
+    post_title = serializers.CharField(read_only=True, source="post.title")
+
+    class Meta(CommentSerializer.Meta):
+        fields = ("content", "created_at", "post_title", "owner_username")
+
+
+class CommentRetrieveSerializer(CommentSerializer):
+    owner = ProfileListRetrieveSerializer(read_only=True)
+    post = serializers.SlugRelatedField(read_only=True, slug_field="title")
