@@ -86,6 +86,8 @@ services:
     restart: on-failure
     depends_on:
       - redis
+      - celery
+      - celery_beat
 
 volumes:
   local_db:
