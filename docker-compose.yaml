@@ -26,6 +26,46 @@ services:
     volumes:
       - local_db:${PGDATA}
 
+  redis:
+    image: redis:alpine
+    restart: on-failure
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+    ports:
+      - "6379:6379"
+    volumes:
+      - local_redis:/data
+
+  celery:
+    build:
+      context: .
+    command: >
+      sh -c "python manage.py wait_for_db &&
+      celery -A social_media_api worker -l INFO"
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - social_media
+      - redis
+    volumes:
+      - ./:/app
+
+  celery_beat:
+    build:
+      context: .
+    command: >
+      sh -c "python manage.py wait_for_db &&
+      celery -A social_media_api beat -l INFO"
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - social_media
+      - redis
+    volumes:
+      - ./:/app
+
 volumes:
   local_db:
   local_media:
+  local_redis:
