@@ -90,7 +90,7 @@ class Post(models.Model):
         blank=True,
     )
     created_at = models.DateTimeField(auto_now_add=True)
-    is_published = models.BooleanField()
+    is_published = models.BooleanField(default=False)
 
     class Meta:
         ordering = ["-created_at"]
@@ -105,9 +105,7 @@ class Post(models.Model):
     def save(self, *args, **kwargs):
         self.full_clean()
 
-        if self.publish_at is not None and self.publish_at >= timezone.now():
-            self.is_published = False
-        else:
+        if not (self.publish_at is not None and self.publish_at >= timezone.now()):
             self.is_published = True
 
         self.publish_at = self.publish_at or self.created_at or timezone.now()
