@@ -78,7 +78,10 @@ class PostListSerializer(PostSerializer):
     )
 
     class Meta(PostSerializer.Meta):
-        extra_kwargs = {"created_at": {"format": "%d.%m.%Y %H:%M"}}
+        extra_kwargs = {
+            "created_at": {"format": "%d.%m.%Y %H:%M"},
+            "publish_at": {"format": "%d.%m.%Y %H:%M"},
+        }
 
 
 class PostRetrieveSerializer(PostSerializer):
