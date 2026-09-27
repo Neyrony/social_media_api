@@ -1,5 +1,7 @@
+from django.db.models import Q
 from rest_framework import mixins, status
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
@@ -19,10 +21,17 @@ from social_media.serializers import (
 
 class PostViewSet(ModelViewSet):
     pagination_class = BasePagination
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
     def get_queryset(self):
-        queryset = Post.objects.filter(is_published=True)
+        queryset = Post.objects.all()
+
+        if self.action == "list":
+            queryset = queryset.filter(is_published=True)
+        else:
+            queryset = queryset.filter(
+                Q(is_published=True) | Q(owner=self.request.user.profile)
+            )
 
         if self.action in ("list", "retrieve"):
             queryset = queryset.select_related(

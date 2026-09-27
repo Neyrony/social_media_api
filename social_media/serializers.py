@@ -100,7 +100,7 @@ class PostRetrieveSerializer(PostSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     post = serializers.PrimaryKeyRelatedField(
-        queryset=Post.objects.filter(is_public=True)
+        queryset=Post.objects.filter(is_published=True)
     )
 
     class Meta:
