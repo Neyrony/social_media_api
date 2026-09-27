@@ -16,6 +16,8 @@ from social_media.serializers import (
     ProfileFollowingSerializer,
     EmptySerializer,
     ProfileDetailedView,
+    CommentListSerializer,
+    CommentSerializer,
 )
 
 
@@ -45,10 +47,31 @@ class PostViewSet(ModelViewSet):
             return PostListSerializer
         elif self.action == "retrieve":
             return PostRetrieveSerializer
+        elif self.action == "comments":
+            if self.request.method == "POST":
+                return CommentSerializer
+            return CommentListSerializer
         return PostSerializer
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user.profile)
+
+    @action(detail=True, methods=["GET", "POST"], permission_classes=[IsAuthenticated])
+    def comments(self, request, pk):
+        post = self.get_object()
+
+        if request.method == "GET":
+            post_comments = post.comments.select_related("owner")
+            page = self.paginate_queryset(post_comments)
+            comments_serializer = self.get_serializer(page, many=True)
+
+            return self.get_paginated_response(comments_serializer.data)
+        elif request.method == "POST":
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save(post=post, owner=request.user.profile)
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class ProfileViewSet(
