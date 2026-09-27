@@ -1,5 +1,5 @@
 from django.urls import reverse
-from django.utils import dateformat
+from django.utils import dateformat, timezone
 
 from core.tests.authenticated_test_case import TestAuthenticatedUser
 from social_media.models import Post, Comment, Hashtag
@@ -49,7 +49,10 @@ class PostsAdminTest(TestAuthenticatedUser):
         self.assertContains(response, self.post.content)
         self.assertContains(response, str(self.post.owner))
         self.assertContains(
-            response, dateformat.format(self.post.created_at, "N j, Y, g:i a")
+            response,
+            dateformat.format(
+                timezone.localtime(self.post.created_at), "N j, Y, g:i a"
+            ),
         )
 
 
@@ -76,5 +79,8 @@ class CommentsAdminTest(TestAuthenticatedUser):
         self.assertContains(response, str(self.comment.owner))
         self.assertContains(response, str(self.comment.post))
         self.assertContains(
-            response, dateformat.format(self.comment.created_at, "N j, Y, g:i a")
+            response,
+            dateformat.format(
+                timezone.localtime(self.comment.created_at), "N j, Y, g:i a"
+            ),
         )
