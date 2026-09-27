@@ -192,3 +192,10 @@ CELERY_TASK_TIME_LIMIT = 30 * 60
 CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
 
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+
+CELERY_BEAT_SCHEDULE = {
+    "publish-shedule-post-every-minute": {
+        "task": "social_media.tasks.publish_post",
+        "schedule": 60,
+    },
+}
