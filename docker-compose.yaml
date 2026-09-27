@@ -35,6 +35,16 @@ services:
     volumes:
       - local_redis:/data
 
+  redis_commander:
+    image: rediscommander/redis-commander
+    ports:
+      - "8081:8081"
+    restart: on-failure
+    environment:
+      - REDIS_HOSTS=local:redis:6379:0:${REDIS_PASSWORD}
+    depends_on:
+      - redis
+
   celery:
     build:
       context: .
@@ -64,6 +74,18 @@ services:
       - redis
     volumes:
       - ./:/app
+
+  flower:
+    build:
+      context: .
+    command: celery -A social_media_api flower -l INFO
+    ports:
+      - "5555:5555"
+    env_file:
+      - .env
+    restart: on-failure
+    depends_on:
+      - redis
 
 volumes:
   local_db:
