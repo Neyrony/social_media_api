@@ -11,7 +11,7 @@ def validate_publish_at(value, exception, instance):
             elif value is not None and value < timezone.now():
                 raise exception("This value should be greater than time now")
 
-            return value
+        return value
 
     if value is not None and value <= timezone.now():
         raise exception("This value should be greater than time now")
