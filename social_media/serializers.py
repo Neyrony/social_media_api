@@ -56,14 +56,16 @@ class PostSerializer(serializers.ModelSerializer):
             "liked_by",
             "created_at",
             "publish_at",
+            "is_published",
         )
-        read_only_fields = ("id", "owner", "liked_by", "created_at")
+        read_only_fields = ("id", "owner", "liked_by", "created_at", "is_published")
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
 
         if instance.owner != self.context["request"].user.profile:
             data.pop("publish_at", None)
+            data.pop("is_published", None)
 
         return data
 
