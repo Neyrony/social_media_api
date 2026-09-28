@@ -38,15 +38,19 @@ class PostViewSet(ModelViewSet):
             queryset = queryset.filter(is_published=True)
         elif self.action == "my_posts":
             queryset = queryset.filter(owner=self.request.user.profile)
+        elif self.action == "following":
+            queryset = queryset.filter(
+                owner__in=self.request.user.profile.following.all()
+            )
         else:
             queryset = queryset.filter(
                 Q(is_published=True) | Q(owner=self.request.user.profile)
             )
 
-        if self.action in ("list", "retrieve", "my_posts"):
+        if self.action in ("list", "retrieve", "my_posts", "following"):
             queryset = queryset.select_related(
                 "owner__user",
-            ).prefetch_related("liked_by")
+            ).prefetch_related("liked_by", "hashtags")
 
         if self.action == "list":
             hashtag_str = self.request.query_params.get("hashtags")
@@ -57,7 +61,7 @@ class PostViewSet(ModelViewSet):
         return queryset.distinct()
 
     def get_serializer_class(self):
-        if self.action in ("list", "my_posts"):
+        if self.action in ("list", "my_posts", "following"):
             return PostListSerializer
         elif self.action == "retrieve":
             return PostRetrieveSerializer
@@ -73,6 +77,14 @@ class PostViewSet(ModelViewSet):
         my_posts_serializer = self.get_serializer(page, many=True)
 
         return self.get_paginated_response(my_posts_serializer.data)
+
+    @action(detail=False, methods=["GET"])
+    def following(self, request):
+        following_post = self.get_queryset()
+        page = self.paginate_queryset(following_post)
+        following_post_serializer = self.get_serializer(page, many=True)
+
+        return self.get_paginated_response(following_post_serializer.data)
 
 
 class CommentViewSet(ModelViewSet):
