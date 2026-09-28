@@ -42,12 +42,14 @@ class PostViewSet(ModelViewSet):
             queryset = queryset.filter(
                 owner__in=self.request.user.profile.following.all()
             )
+        elif self.action == "liked":
+            queryset = queryset.filter(liked_by=self.request.user.profile)
         else:
             queryset = queryset.filter(
                 Q(is_published=True) | Q(owner=self.request.user.profile)
             )
 
-        if self.action in ("list", "retrieve", "my_posts", "following"):
+        if self.action in ("list", "retrieve", "my_posts", "following", "liked"):
             queryset = queryset.select_related(
                 "owner__user",
             ).prefetch_related("liked_by", "hashtags")
@@ -61,7 +63,7 @@ class PostViewSet(ModelViewSet):
         return queryset.distinct()
 
     def get_serializer_class(self):
-        if self.action in ("list", "my_posts", "following"):
+        if self.action in ("list", "my_posts", "following", "liked"):
             return PostListSerializer
         elif self.action == "retrieve":
             return PostRetrieveSerializer
@@ -101,6 +103,14 @@ class PostViewSet(ModelViewSet):
             post.liked_by.add(user_profile)
 
         return Response(status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=["GET"])
+    def liked(self, request):
+        liked_post = self.get_queryset()
+        page = self.paginate_queryset(liked_post)
+        liked_post_serializer = self.get_serializer(page, many=True)
+
+        return self.get_paginated_response(liked_post_serializer.data)
 
 
 class CommentViewSet(ModelViewSet):
