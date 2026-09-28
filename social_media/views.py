@@ -24,6 +24,13 @@ from social_media.serializers import (
 class PostViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
+    @staticmethod
+    def _str_to_int_list(hashtag_str: str) -> list:
+        try:
+            return [int(hashtag_id.strip()) for hashtag_id in hashtag_str.split(",")]
+        except ValueError:
+            return []
+
     def get_queryset(self):
         queryset = Post.objects.all()
 
@@ -39,7 +46,13 @@ class PostViewSet(ModelViewSet):
                 "owner__user",
             ).prefetch_related("liked_by")
 
-        return queryset
+        if self.action == "list":
+            hashtag_str = self.request.query_params.get("hashtags")
+            if hashtag_str is not None:
+                hashtag_list = self._str_to_int_list(hashtag_str)
+                queryset = queryset.filter(hashtags__in=hashtag_list)
+
+        return queryset.distinct()
 
     def get_serializer_class(self):
         if self.action == "list":
