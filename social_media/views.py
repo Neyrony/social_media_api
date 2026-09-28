@@ -65,6 +65,8 @@ class PostViewSet(ModelViewSet):
             return PostListSerializer
         elif self.action == "retrieve":
             return PostRetrieveSerializer
+        elif self.action == "like":
+            return EmptySerializer
         return PostSerializer
 
     def perform_create(self, serializer):
@@ -85,6 +87,20 @@ class PostViewSet(ModelViewSet):
         following_post_serializer = self.get_serializer(page, many=True)
 
         return self.get_paginated_response(following_post_serializer.data)
+
+    @action(detail=True, methods=["POST"], permission_classes=[IsAuthenticated])
+    def like(self, request, pk):
+        post = self.get_object()
+        user_profile = self.request.user.profile
+
+        is_liked = post.liked_by.filter(id=user_profile.id).exists()
+
+        if is_liked:
+            post.liked_by.remove(user_profile)
+        else:
+            post.liked_by.add(user_profile)
+
+        return Response(status=status.HTTP_200_OK)
 
 
 class CommentViewSet(ModelViewSet):
