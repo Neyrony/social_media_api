@@ -101,7 +101,7 @@ class PostRetrieveSerializer(PostSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = ("content", "created_at", "post", "owner")
+        fields = ("id", "content", "created_at", "post", "owner")
         read_only_fields = ("id", "post", "owner")
         extra_kwargs = {"created_at": {"format": "%d.%m.%Y %H:%M"}}
 
@@ -110,7 +110,7 @@ class CommentListSerializer(CommentSerializer):
     owner_username = serializers.CharField(read_only=True, source="owner.username")
 
     class Meta(CommentSerializer.Meta):
-        fields = ("content", "created_at", "owner_username")
+        fields = ("id", "content", "created_at", "owner_username")
 
 
 class CommentRetrieveSerializer(CommentSerializer):

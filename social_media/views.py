@@ -5,8 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
-from social_media.models import Post, Profile
-from social_media.pagination import BasePagination
+from social_media.models import Post, Profile, Comment
 from social_media.permissions import IsOwnerOrReadOnly
 from social_media.serializers import (
     PostListSerializer,
@@ -18,11 +17,11 @@ from social_media.serializers import (
     ProfileDetailedView,
     CommentListSerializer,
     CommentSerializer,
+    CommentRetrieveSerializer,
 )
 
 
 class PostViewSet(ModelViewSet):
-    pagination_class = BasePagination
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
     def get_queryset(self):
@@ -47,31 +46,36 @@ class PostViewSet(ModelViewSet):
             return PostListSerializer
         elif self.action == "retrieve":
             return PostRetrieveSerializer
-        elif self.action == "comments":
-            if self.request.method == "POST":
-                return CommentSerializer
-            return CommentListSerializer
         return PostSerializer
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user.profile)
 
-    @action(detail=True, methods=["GET", "POST"], permission_classes=[IsAuthenticated])
-    def comments(self, request, pk):
-        post = self.get_object()
 
-        if request.method == "GET":
-            post_comments = post.comments.select_related("owner")
-            page = self.paginate_queryset(post_comments)
-            comments_serializer = self.get_serializer(page, many=True)
+class CommentViewSet(ModelViewSet):
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
-            return self.get_paginated_response(comments_serializer.data)
-        elif request.method == "POST":
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save(post=post, owner=request.user.profile)
+    def get_queryset(self):
+        queryset = Comment.objects.filter(post_id=self.kwargs.get("post_pk"))
 
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        if self.action == "list":
+            queryset = queryset.select_related("owner")
+        elif self.action == "retrieve":
+            queryset = queryset.select_related("owner__user")
+
+        return queryset
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return CommentListSerializer
+        elif self.action == "retrieve":
+            return CommentRetrieveSerializer
+        return CommentSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(
+            post_id=self.kwargs.get("post_pk"), owner=self.request.user.profile
+        )
 
 
 class ProfileViewSet(
@@ -79,8 +83,6 @@ class ProfileViewSet(
     mixins.ListModelMixin,
     GenericViewSet,
 ):
-    pagination_class = BasePagination
-
     def get_queryset(self):
         queryset = Profile.objects.all()
 
