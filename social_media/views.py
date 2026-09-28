@@ -36,12 +36,14 @@ class PostViewSet(ModelViewSet):
 
         if self.action == "list":
             queryset = queryset.filter(is_published=True)
+        elif self.action == "my_posts":
+            queryset = queryset.filter(owner=self.request.user.profile)
         else:
             queryset = queryset.filter(
                 Q(is_published=True) | Q(owner=self.request.user.profile)
             )
 
-        if self.action in ("list", "retrieve"):
+        if self.action in ("list", "retrieve", "my_posts"):
             queryset = queryset.select_related(
                 "owner__user",
             ).prefetch_related("liked_by")
@@ -55,7 +57,7 @@ class PostViewSet(ModelViewSet):
         return queryset.distinct()
 
     def get_serializer_class(self):
-        if self.action == "list":
+        if self.action in ("list", "my_posts"):
             return PostListSerializer
         elif self.action == "retrieve":
             return PostRetrieveSerializer
@@ -63,6 +65,14 @@ class PostViewSet(ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user.profile)
+
+    @action(detail=False, methods=["GET"], url_path="my")
+    def my_posts(self, request):
+        my_posts = self.get_queryset()
+        page = self.paginate_queryset(my_posts)
+        my_posts_serializer = self.get_serializer(page, many=True)
+
+        return self.get_paginated_response(my_posts_serializer.data)
 
 
 class CommentViewSet(ModelViewSet):
