@@ -1,7 +1,8 @@
 from django.core.exceptions import ValidationError
+from django.db import transaction
 from rest_framework import serializers
 
-from social_media.models import Post, Profile, Comment
+from social_media.models import Post, Profile, Comment, Hashtag
 from social_media.validators import validate_publish_at
 
 
@@ -44,7 +45,16 @@ class ProfileFollowingSerializer(ProfileSerializer):
         fields = ("id", "username", "bio", "profile_picture")
 
 
+class HashtagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Hashtag
+        fields = ("id", "name")
+        extra_kwargs = {"name": {"validators": []}}
+
+
 class PostSerializer(serializers.ModelSerializer):
+    hashtags = HashtagSerializer(many=True, allow_empty=True)
+
     class Meta:
         model = Post
         fields = (
@@ -52,6 +62,7 @@ class PostSerializer(serializers.ModelSerializer):
             "title",
             "content",
             "image",
+            "hashtags",
             "owner",
             "liked_by",
             "created_at",
@@ -59,6 +70,9 @@ class PostSerializer(serializers.ModelSerializer):
             "is_published",
         )
         read_only_fields = ("id", "owner", "liked_by", "created_at", "is_published")
+        extra_kwargs = {
+            "hashtags": {"style": {"base_template": "checkbox_multiple.html"}}
+        }
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
@@ -72,8 +86,33 @@ class PostSerializer(serializers.ModelSerializer):
     def validate_publish_at(self, value):
         return validate_publish_at(value, ValidationError, self.instance)
 
+    @transaction.atomic
+    def create(self, validated_data):
+        hashtags = validated_data.pop("hashtags")
+        post = super().create(validated_data)
+        for hashtag_data in hashtags:
+            hashtag, _ = Hashtag.objects.get_or_create(**hashtag_data)
+            post.hashtags.add(hashtag)
+
+        return post
+
+    @transaction.atomic
+    def update(self, instance, validated_data):
+        hashtags = validated_data.pop("hashtags", None)
+        instance = super().update(instance, validated_data)
+        if hashtags is not None:
+            instance.hashtags.clear()
+            for hashtag_data in hashtags:
+                hashtag, _ = Hashtag.objects.get_or_create(**hashtag_data)
+                instance.hashtags.add(hashtag)
+
+        return instance
+
 
 class PostListSerializer(PostSerializer):
+    hashtags = serializers.SlugRelatedField(
+        many=True, read_only=True, slug_field="name"
+    )
     owner = serializers.StringRelatedField(read_only=True)
     liked_by = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field="username"
@@ -87,6 +126,7 @@ class PostListSerializer(PostSerializer):
 
 
 class PostRetrieveSerializer(PostSerializer):
+    hashtags = HashtagSerializer(many=True, read_only=True, allow_empty=True)
     owner = ProfileListRetrieveSerializer(read_only=True)
     liked_by = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field="username"

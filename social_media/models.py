@@ -75,6 +75,13 @@ class Hashtag(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        if self.name is not None:
+            self.name = self.name.lower()
+
+        self.full_clean()
+        super().save(*args, **kwargs)
+
 
 class Post(models.Model):
     title = models.CharField(max_length=255)
