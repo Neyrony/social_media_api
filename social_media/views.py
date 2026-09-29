@@ -1,4 +1,5 @@
 from django.db.models import Q
+from drf_spectacular.utils import extend_schema_view, OpenApiParameter, extend_schema
 from rest_framework import mixins, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -21,6 +22,71 @@ from social_media.serializers import (
 )
 
 
+@extend_schema_view(
+    list=extend_schema(
+        summary="Show list of all posts",
+        description="Show list all posts that can be filtered by hashtags",
+        parameters=[
+            OpenApiParameter(
+                name="hashtags",
+                type=str,
+                description="Filter by hashtags",
+                location="query",
+                required=False,
+            ),
+        ],
+        responses=PostListSerializer,
+    ),
+    retrieve=extend_schema(
+        summary="Show particular post by id",
+        description="Show detailed information about a post",
+        responses="PostRetrieveSerializer",
+    ),
+    create=extend_schema(
+        summary="Create a new post",
+        description="Create a new post with given data",
+        request=PostSerializer,
+        responses={201: PostSerializer},
+    ),
+    update=extend_schema(
+        summary="Update an existing post",
+        description="Update an existing post with given data",
+        request=PostSerializer,
+        responses={200: PostSerializer},
+    ),
+    partial_update=extend_schema(
+        summary="Partially update an existing post",
+        description="Partially update an existing post with given data",
+        request=PostSerializer,
+        responses={200: PostSerializer},
+    ),
+    destroy=extend_schema(
+        summary="Destroy an existing post",
+        description="Destroy an existing post by its id",
+        request=None,
+        responses={204: None},
+    ),
+    my_posts=extend_schema(
+        summary="Show list of all users's posts",
+        request=None,
+        responses={200: PostListSerializer},
+    ),
+    following=extend_schema(
+        summary="Show list of posts from user's following",
+        request=None,
+        responses={200: PostListSerializer},
+    ),
+    like=extend_schema(
+        summary="Press like on the particular video",
+        request=None,
+        responses={204: None},
+    ),
+    liked=extend_schema(
+        summary="Show list of posts that user liked",
+        request=None,
+        responses={200: PostListSerializer},
+    ),
+)
 class PostViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
@@ -102,7 +168,7 @@ class PostViewSet(ModelViewSet):
         else:
             post.liked_by.add(user_profile)
 
-        return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(detail=False, methods=["GET"])
     def liked(self, request):
@@ -113,6 +179,36 @@ class PostViewSet(ModelViewSet):
         return self.get_paginated_response(liked_post_serializer.data)
 
 
+@extend_schema_view(
+    list=extend_schema(
+        summary="Show list of comments",
+        description="Show list of comment related to particular post",
+        responses={200: CommentListSerializer},
+    ),
+    retrieve=extend_schema(
+        summary="Show particular comment by id",
+        description="Show detailed information about a comment related to particular post",
+    ),
+    create=extend_schema(
+        summary="Create a new comment",
+        description="Create a new comment that connected to post",
+        request=CommentSerializer,
+        responses={200: CommentSerializer},
+    ),
+    update=extend_schema(
+        summary="Update existing comment",
+        request=CommentSerializer,
+        responses={200: CommentSerializer},
+    ),
+    partial_update=extend_schema(
+        summary="Partially update existing comment",
+        request=CommentSerializer,
+        responses={200: CommentSerializer},
+    ),
+    destroy=extend_schema(
+        summary="Destroy existing comment", request=None, responses={204: None}
+    ),
+)
 class CommentViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
@@ -139,6 +235,49 @@ class CommentViewSet(ModelViewSet):
         )
 
 
+@extend_schema_view(
+    list=extend_schema(
+        summary="Show list of all profiles",
+        responses={200: ProfileListRetrieveSerializer},
+    ),
+    retrieve=extend_schema(
+        summary="Show particular profile by id",
+        description="Show detailed information about profile",
+    ),
+    me=[
+        extend_schema(
+            methods=["GET"],
+            summary="Show detailed info about user's profile",
+            responses={200: ProfileListRetrieveSerializer},
+        ),
+        extend_schema(
+            methods=["PUT"],
+            summary="Update detailed info about user's profile",
+            request=ProfileDetailedView,
+            responses={200: ProfileDetailedView},
+        ),
+        extend_schema(
+            methods=["PATCH"],
+            summary="Partially update detailed info about user's profile",
+            request=ProfileDetailedView,
+            responses={200: ProfileDetailedView},
+        ),
+    ],
+    following=extend_schema(
+        summary="Show all profiles that user follows",
+        responses={200: ProfileFollowingSerializer},
+    ),
+    followers=extend_schema(
+        summary="Show all profiles that follows user",
+        responses={200: ProfileFollowingSerializer},
+    ),
+    follow=extend_schema(
+        summary="Follow user(profile) to particular profile",
+        description="Change follow status to opposite",
+        request=EmptySerializer,
+        responses={200: EmptySerializer},
+    ),
+)
 class ProfileViewSet(
     mixins.RetrieveModelMixin,
     mixins.ListModelMixin,
@@ -227,4 +366,4 @@ class ProfileViewSet(
         else:
             user_profile.following.remove(following_profile)
 
-        return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_204_NO_CONTENT)
