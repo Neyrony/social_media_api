@@ -15,6 +15,7 @@ services:
     volumes:
       - ./:/app
       - local_media:/files/media/
+    restart: unless-stopped
 
   db:
     image: postgres:16-alpine

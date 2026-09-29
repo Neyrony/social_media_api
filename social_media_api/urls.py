@@ -20,6 +20,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularSwaggerView,
+    SpectacularRedocView,
+)
 
 urlpatterns = (
     [
@@ -28,6 +33,13 @@ urlpatterns = (
             "api/social-media/", include("social_media.urls", namespace="social_media")
         ),
         path("api/user/", include("user.urls", namespace="user")),
+        path("api/docs/schema", SpectacularAPIView.as_view(), name="schema"),
+        path(
+            "api/docs/swagger/",
+            SpectacularSwaggerView.as_view(),
+            name="schema-swagger-ui",
+        ),
+        path("api/docs/redoc/", SpectacularRedocView.as_view(), name="schema-redoc"),
     ]
     + debug_toolbar_urls()
     + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
