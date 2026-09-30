@@ -53,7 +53,7 @@ class HashtagSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    hashtags = HashtagSerializer(many=True, allow_empty=True)
+    hashtags = HashtagSerializer(many=True, allow_empty=True, required=False)
 
     class Meta:
         model = Post
