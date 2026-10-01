@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from drf_spectacular.utils import extend_schema_view, extend_schema, inline_serializer
 from rest_framework import status, serializers
 from rest_framework.generics import CreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_204_NO_CONTENT
 from rest_framework.views import APIView
@@ -74,6 +75,8 @@ class UserManagerView(RetrieveUpdateDestroyAPIView):
     )
 )
 class LogOutAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def post(self, request, *args, **kwargs):
         try:
             refresh_token = request.data.get("refresh_token")
