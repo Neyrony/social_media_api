@@ -88,11 +88,12 @@ class PostSerializer(serializers.ModelSerializer):
 
     @transaction.atomic
     def create(self, validated_data):
-        hashtags = validated_data.pop("hashtags")
+        hashtags = validated_data.pop("hashtags", None)
         post = super().create(validated_data)
-        for hashtag_data in hashtags:
-            hashtag, _ = Hashtag.objects.get_or_create(**hashtag_data)
-            post.hashtags.add(hashtag)
+        if hashtags is not None:
+            for hashtag_data in hashtags:
+                hashtag, _ = Hashtag.objects.get_or_create(**hashtag_data)
+                post.hashtags.add(hashtag)
 
         return post
 
