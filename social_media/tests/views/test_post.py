@@ -24,7 +24,10 @@ class UnauthenticatedUserTest(APITestCase):
             email="test@example.com",
             password="test12345",
         )
-        detailed_url = get_detailed_url(test_user.profile.pk)
+        post = Post.objects.create(
+            title="test title", content="test content", owner=test_user.profile
+        )
+        detailed_url = get_detailed_url(post.pk)
 
         response = self.client.get(LIST_URL)
 
@@ -47,6 +50,24 @@ class UnauthenticatedUserTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
         response = self.client.delete(detailed_url)
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        response = self.client.get(reverse("social_media:post-my-posts"))
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        response = self.client.get(reverse("social_media:post-following"))
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        response = self.client.post(
+            reverse("social_media:post-like", kwargs={"pk": post.pk})
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        response = self.client.get(reverse("social_media:post-liked"))
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
