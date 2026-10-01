@@ -31,6 +31,7 @@ class Profile(models.Model):
     bio = models.TextField(blank=True)
     profile_picture = models.ImageField(
         null=True,
+        blank=True,
         upload_to=ImagePath(path_to_store="profile_picture/uploads/", field="username"),
     )
     following = models.ManyToManyField(
