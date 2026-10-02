@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "debug_toolbar",
     "rest_framework",
     "rest_framework_simplejwt.token_blacklist",
     "django_celery_beat",
@@ -61,7 +60,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -69,6 +67,26 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+if DEBUG:
+    INSTALLED_APPS += ["debug_toolbar"]
+
+    MIDDLEWARE = (
+        MIDDLEWARE[:1]
+        + ["debug_toolbar.middleware.DebugToolbarMiddleware"]
+        + MIDDLEWARE[1:]
+    )
+
+    INTERNAL_IPS = [
+        "127.0.0.1",
+    ]
+
+    DEBUG_TOOLBAR_CONFIG = {
+        "IS_RUNNING_TESTS": False,
+        "SHOW_TOOLBAR_CALLBACK": lambda request: DEBUG
+        and not any("test" in arg for arg in sys.argv),
+    }
+
 
 ROOT_URLCONF = "social_media_api.urls"
 
@@ -152,16 +170,6 @@ STATIC_URL = "static/"
 
 MEDIA_ROOT = "/files/media/"
 MEDIA_URL = "/media/"
-
-INTERNAL_IPS = [
-    "127.0.0.1",
-]
-
-DEBUG_TOOLBAR_CONFIG = {
-    "IS_RUNNING_TESTS": False,
-    "SHOW_TOOLBAR_CALLBACK": lambda request: DEBUG
-    and not any("test" in arg for arg in sys.argv),
-}
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
