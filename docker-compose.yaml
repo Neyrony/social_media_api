@@ -1,0 +1,96 @@
+services:
+  social_media:
+    build:
+      context: .
+    command: >
+      sh -c "python manage.py wait_for_db &&
+        python manage.py migrate &&
+        python manage.py runserver 0.0.0.0:8000"
+    env_file:
+      - .env
+    ports:
+      - "8001:8000"
+    depends_on:
+      - db
+    volumes:
+      - ./:/app
+      - local_media:/files/media/
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    restart: on-failure
+    ports:
+      - "5433:5432"
+    env_file:
+      - .env
+    volumes:
+      - local_db:${PGDATA}
+
+  redis:
+    image: redis:alpine
+    restart: on-failure
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+    ports:
+      - "6379:6379"
+    volumes:
+      - local_redis:/data
+
+  redis_commander:
+    image: rediscommander/redis-commander
+    ports:
+      - "8081:8081"
+    restart: on-failure
+    environment:
+      - REDIS_HOSTS=local:redis:6379:0:${REDIS_PASSWORD}
+    depends_on:
+      - redis
+
+  celery:
+    build:
+      context: .
+    command: >
+      sh -c "python manage.py wait_for_db &&
+      celery -A social_media_api worker -l INFO"
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - social_media
+      - redis
+    volumes:
+      - ./:/app
+
+  celery_beat:
+    build:
+      context: .
+    command: >
+      sh -c "python manage.py wait_for_db &&
+      celery -A social_media_api beat -l INFO"
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - social_media
+      - redis
+    volumes:
+      - ./:/app
+
+  flower:
+    build:
+      context: .
+    command: celery -A social_media_api flower -l INFO
+    ports:
+      - "5555:5555"
+    env_file:
+      - .env
+    restart: on-failure
+    depends_on:
+      - redis
+      - celery
+      - celery_beat
+
+volumes:
+  local_db:
+  local_media:
+  local_redis:
